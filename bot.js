@@ -6,6 +6,7 @@ const {
     PermissionFlagsBits, ActivityType
 } = require("discord.js");
 const { createClient } = require("@supabase/supabase-js");
+const ws     = require("ws");
 const crypto = require("crypto");
 const http   = require("http");
 
@@ -33,7 +34,9 @@ if (missing.length) {
     process.exit(1);
 }
 
-const sb = createClient(SB_URL, SB_KEY);
+const sb = createClient(SB_URL, SB_KEY, {
+    realtime: { transport: ws }
+});
 
 // ── Rate limiter (per-user, in-memory) ────────────────────────────────────────
 // Prevents button/command spam hammering the DB
